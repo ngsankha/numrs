@@ -1,5 +1,5 @@
-extern crate num_rs;
-use num_rs::matrix::Matrix;
+extern crate numrs;
+use numrs::matrix::Matrix;
 
 #[test]
 fn test_basic_matrix() {

@@ -1,8 +1,8 @@
 #![feature(macro_rules)]
 
-extern crate num_rs;
-use num_rs::matrix::Matrix;
-use num_rs::solver;
+extern crate numrs;
+use numrs::matrix::Matrix;
+use numrs::solver;
 use std::num::abs_sub;
 
 macro_rules! assert_nearby(
