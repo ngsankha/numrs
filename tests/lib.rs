@@ -102,14 +102,10 @@ fn test_scalar_multiply() {
 
 #[test]
 fn test_gauss_seidel() {
-  let mut a = Matrix::new(2, 2, 0.0);
-  a.set(0, 0, 16.0);
-  a.set(0, 1, 3.0);
-  a.set(1, 0, 7.0);
-  a.set(1, 1, -11.0);
-  let mut b = Matrix::new(2, 1, 0.0);
-  b.set(0, 0, 11.0);
-  b.set(1, 0, 13.0);
+  let a_elems = [16.0, 3.0, 7.0, -11.0];
+  let b_elems = [11.0, 13.0];
+  let a = Matrix::from_elems(2, 2, a_elems.as_slice());
+  let b = Matrix::from_elems(2, 1, b_elems.as_slice());
   let mut x = Matrix::new(2, 1, 1.0);
   x = solver::gauss_seidel(a, b, x, 1000);
   assert_nearby!(x.get(0, 0), 0.8122);

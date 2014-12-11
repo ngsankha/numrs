@@ -82,6 +82,16 @@ impl Matrix {
     }
   }
 
+  pub fn from_elems(rows: uint, cols: uint, elems: &[f64]) -> Matrix {
+    let mut m = Matrix {
+      rows: rows,
+      cols: cols,
+      data: Vec::new()
+    };
+    m.data.push_all(elems);
+    m
+  }
+
   pub fn identity(n: uint) -> Matrix {
     let mut m = Matrix {
       rows: n,
