@@ -1,0 +1,8 @@
+[package]
+name = "num-rs"
+version = "0.0.1"
+authors = [ "Sankha Narayan Guria <sankha93@gmail.com>" ]
+
+[[bin]]
+name = "num-rs"
+
