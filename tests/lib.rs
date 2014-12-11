@@ -40,3 +40,21 @@ fn test_matrix_add() {
     }
   }
 }
+
+#[test]
+fn test_matrix_multiply() {
+  let mut m1 = matrix::Matrix::new(2, 2, 0.0);
+  let mut m2 = matrix::Matrix::new(2, 2, 0.0);
+  for i in range(0, m1.num_rows()) {
+    for j in range(0, m1.num_cols()) {
+      m1.set(i, j, (i + j) as f64);
+      m2.set(i, j, (i + j) as f64);
+    }
+  }
+
+  let res = m1.multiply(m2);
+  assert_eq!(res.get(0, 0), 1.0);
+  assert_eq!(res.get(0, 1), 2.0);
+  assert_eq!(res.get(1, 0), 2.0);
+  assert_eq!(res.get(1, 1), 5.0);
+}

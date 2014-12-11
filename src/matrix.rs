@@ -47,6 +47,24 @@ impl Matrix {
     }
   }
 
+  pub fn multiply(&self, m: Matrix) -> Matrix {
+    if self.num_cols() == m.num_rows() {
+      let mut new_mat = Matrix::new(self.num_rows(), m.num_cols(), 0.0);
+      for i in range(0, self.num_rows()) {
+        for j in range(0, m.num_cols()) {
+          let mut sum: f64 = 0.0;
+          for k in range(0, self.num_cols()) {
+            sum += self.get(i, k) * m.get(k, j);
+          }
+          new_mat.set(i, j, sum);
+        }
+      }
+      new_mat
+    } else {
+      panic!("Matrices are not conformable for multiplication.")
+    }
+  }
+
   pub fn new(rows: uint, cols: uint, default: f64) -> Matrix {
     Matrix {
       rows: rows,
