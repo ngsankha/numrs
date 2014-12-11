@@ -58,3 +58,20 @@ fn test_matrix_multiply() {
   assert_eq!(res.get(1, 0), 2.0);
   assert_eq!(res.get(1, 1), 5.0);
 }
+
+#[test]
+fn test_scalar_multiply() {
+  let mut m = matrix::Matrix::new(2, 2, 0.0);
+  for i in range(0, m.num_rows()) {
+    for j in range(0, m.num_cols()) {
+      m.set(i, j, (i + j) as f64);
+    }
+  }
+
+  m.scalar_multiply(-1.0);
+  for i in range(0, m.num_rows()) {
+    for j in range(0, m.num_cols()) {
+      assert_eq!(m.get(i, j), -1.0 * ((i + j) as f64));
+    }
+  }
+}

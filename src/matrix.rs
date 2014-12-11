@@ -65,6 +65,15 @@ impl Matrix {
     }
   }
 
+  pub fn scalar_multiply(&mut self, m: f64) {
+    for i in range(0, self.num_rows()) {
+      for j in range(0, self.num_cols()) {
+        let tmp: f64 = m * self.get(i, j);
+        self.set(i, j, tmp);
+      }
+    }
+  }
+
   pub fn new(rows: uint, cols: uint, default: f64) -> Matrix {
     Matrix {
       rows: rows,
