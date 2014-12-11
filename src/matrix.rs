@@ -33,6 +33,20 @@ impl Matrix {
     }
   }
 
+  pub fn add(&self, m: Matrix) -> Matrix {
+    if self.num_rows() == m.num_rows() && self.num_cols() == self.num_cols() {
+      let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
+      for i in range(0, self.num_rows()) {
+        for j in range(0, self.num_cols()) {
+          new_mat.set(i, j, self.get(i, j) + m.get(i, j));
+        }
+      }
+      new_mat
+    } else {
+      panic!("Matrices are not conformable for addition.")
+    }
+  }
+
   pub fn new(rows: uint, cols: uint, default: f64) -> Matrix {
     Matrix {
       rows: rows,
