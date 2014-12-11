@@ -23,6 +23,20 @@ fn test_basic_matrix() {
 }
 
 #[test]
+fn test_identity_matrix() {
+  let m = matrix::Matrix::identity(5);
+  for i in range(0, 5) {
+    for j in range(0, 5) {
+      if i == j {
+        assert_eq!(m.get(i, j), 1.0);
+      } else {
+        assert_eq!(m.get(i, j), 0.0);
+      }
+    }
+  }
+}
+
+#[test]
 fn test_matrix_add() {
   let mut m1 = matrix::Matrix::new(2, 2, 0.0);
   let mut m2 = matrix::Matrix::new(2, 2, 0.0);

@@ -81,4 +81,16 @@ impl Matrix {
       data: Vec::from_elem(rows * cols, default)
     }
   }
+
+  pub fn identity(n: uint) -> Matrix {
+    let mut m = Matrix {
+      rows: n,
+      cols: n,
+      data: Vec::from_elem(n * n, 0.0)
+    };
+    for i in range(0, n) {
+      m.set(i, i, 1.0);
+    }
+    m
+  }
 }
