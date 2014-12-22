@@ -89,3 +89,12 @@ fn test_scalar_multiply() {
     }
   }
 }
+
+#[test]
+fn test_matrix_index() {
+  let elems = [16.0, 3.0, 7.0, -11.0];
+  let mat = Matrix::from_elems(2, 2, elems.as_slice());
+  assert_eq!(mat[0].len(), 2);
+  assert_eq!(mat[0][0], 16.0);
+  assert_eq!(mat[0][1], 3.0);
+}

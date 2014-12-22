@@ -4,6 +4,12 @@ pub struct Matrix {
   data: Vec<f64>
 }
 
+impl Index<uint, [f64]> for Matrix {
+  fn index<'a>(&'a self, index: &uint) -> &'a [f64] {
+    self.data.as_slice().slice(self.rows * *index, self.rows * *index + self.cols)
+  }
+}
+
 impl Matrix {
   #[inline(always)]
   pub fn num_rows(&self) -> uint{
