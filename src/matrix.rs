@@ -5,23 +5,24 @@ pub struct Matrix {
 }
 
 impl Index<uint, [f64]> for Matrix {
+  #[inline]
   fn index<'a>(&'a self, index: &uint) -> &'a [f64] {
     self.data.as_slice().slice(self.rows * *index, self.rows * *index + self.cols)
   }
 }
 
 impl Matrix {
-  #[inline(always)]
+  #[inline]
   pub fn num_rows(&self) -> uint{
     self.rows
   }
 
-  #[inline(always)]
+  #[inline]
   pub fn num_cols(&self) -> uint {
     self.cols
   }
 
-  #[inline(always)]
+  #[inline]
   pub fn get(&self, i: uint, j: uint) -> f64 {
     if i < self.num_rows() && j < self.num_cols() {
       self.data[i * self.num_cols() + j]
@@ -30,7 +31,7 @@ impl Matrix {
     }
   }
 
-  #[inline(always)]
+  #[inline]
   pub fn set(&mut self, i: uint, j: uint, num: f64) {
     if i < self.num_rows() && j < self.num_cols() {
       self.data.as_mut_slice()[i * self.num_cols() + j] = num
