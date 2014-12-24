@@ -7,3 +7,4 @@ authors = [ "Sankha Narayan Guria <sankha93@gmail.com>" ]
 name = "numrs"
 path = "src/lib.rs"
 test = true
+doc = true

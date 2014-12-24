@@ -1,3 +1,5 @@
+/// A 2D Matrix type composed of `f64` elements.
+
 pub struct Matrix {
   rows: uint,
   cols: uint,
@@ -8,6 +10,90 @@ impl Index<uint, [f64]> for Matrix {
   #[inline]
   fn index<'a>(&'a self, index: &uint) -> &'a [f64] {
     self.data.as_slice().slice(self.rows * *index, self.rows * *index + self.cols)
+  }
+}
+
+impl Clone for Matrix {
+  fn clone(&self) -> Matrix {
+    Matrix {
+      rows: self.num_rows(),
+      cols: self.num_cols(),
+      data: self.data.clone()
+    }
+  }
+
+  fn clone_from(&mut self, source: &Matrix) {
+    self.rows = source.num_rows();
+    self.cols = source.num_cols();
+    self.data = source.data.clone();
+  }
+}
+
+impl Add<Matrix, Matrix> for Matrix {
+  fn add(self, rhs: Matrix) -> Matrix {
+    if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
+      let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
+      for i in range(0, self.data.len()) {
+        new_mat.data[i] = self.data[i] + rhs.data[i];
+      }
+      new_mat
+    } else {
+      panic!("Matrices are not conformable for addition.");
+    }
+  }
+}
+
+impl Sub<Matrix, Matrix> for Matrix {
+  fn sub(self, rhs: Matrix) -> Matrix {
+    if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
+      let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
+      for i in range(0, self.data.len()) {
+        new_mat.data[i] = self.data[i] - rhs.data[i];
+      }
+      new_mat
+    } else {
+      panic!("Matrices are not conformable for subtraction.");
+    }
+  }
+}
+
+impl Mul<Matrix, Matrix> for Matrix {
+  fn mul(self, rhs: Matrix) -> Matrix {
+    if self.num_cols() == rhs.num_rows() {
+      let mut new_mat = Matrix::new(self.num_rows(), rhs.num_cols(), 0.0);
+      for i in range(0, self.num_rows()) {
+        for j in range(0, rhs.num_cols()) {
+          let mut sum: f64 = 0.0;
+          for k in range(0, self.num_cols()) {
+            sum += self.get(i, k) * rhs.get(k, j);
+          }
+          new_mat.set(i, j, sum);
+        }
+      }
+      new_mat
+    } else {
+      panic!("Matrices are not conformable for multiplication.")
+    }
+  }
+}
+
+impl Neg<Matrix> for Matrix {
+  fn neg(self) -> Matrix {
+    let mut m = self.clone();
+    for i in range(0, self.data.len()) {
+      m.data[i] = -self.data[i];
+    }
+    m
+  }
+}
+
+impl Mul<f64, Matrix> for Matrix {
+  fn mul(self, rhs: f64) -> Matrix {
+    let mut m = self.clone();
+    for i in range(0, self.data.len()) {
+      m.data[i] = rhs * self.data[i];
+    }
+    m
   }
 }
 
@@ -40,47 +126,6 @@ impl Matrix {
     }
   }
 
-  pub fn add(&self, m: Matrix) -> Matrix {
-    if self.num_rows() == m.num_rows() && self.num_cols() == self.num_cols() {
-      let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
-      for i in range(0, self.num_rows()) {
-        for j in range(0, self.num_cols()) {
-          new_mat.set(i, j, self.get(i, j) + m.get(i, j));
-        }
-      }
-      new_mat
-    } else {
-      panic!("Matrices are not conformable for addition.")
-    }
-  }
-
-  pub fn multiply(&self, m: Matrix) -> Matrix {
-    if self.num_cols() == m.num_rows() {
-      let mut new_mat = Matrix::new(self.num_rows(), m.num_cols(), 0.0);
-      for i in range(0, self.num_rows()) {
-        for j in range(0, m.num_cols()) {
-          let mut sum: f64 = 0.0;
-          for k in range(0, self.num_cols()) {
-            sum += self.get(i, k) * m.get(k, j);
-          }
-          new_mat.set(i, j, sum);
-        }
-      }
-      new_mat
-    } else {
-      panic!("Matrices are not conformable for multiplication.")
-    }
-  }
-
-  pub fn scalar_multiply(&mut self, m: f64) {
-    for i in range(0, self.num_rows()) {
-      for j in range(0, self.num_cols()) {
-        let tmp: f64 = m * self.get(i, j);
-        self.set(i, j, tmp);
-      }
-    }
-  }
-
   pub fn new(rows: uint, cols: uint, default: f64) -> Matrix {
     Matrix {
       rows: rows,
@@ -109,5 +154,28 @@ impl Matrix {
       m.set(i, i, 1.0);
     }
     m
+  }
+
+  pub fn reshape(&mut self, newrows: uint, newcols: uint) {
+    if self.rows * self.cols == newrows * newcols {
+      self.rows = newrows;
+      self.cols = newcols;
+    } else {
+      panic!("Total number of elements in matrix should be same.")
+    }
+  }
+
+  pub fn get_vec(&self) -> Vec<f64> {
+    self.data.clone()
+  }
+
+  pub fn transpose(&mut self) {
+    let mut v = self.data.clone();
+    for i in range(0, self.num_rows()) {
+      for j in range(0, self.num_cols()) {
+        v[j * self.num_cols() + i] = self.get(i, j);
+      }
+    }
+    self.data = v;
   }
 }
