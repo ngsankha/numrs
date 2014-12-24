@@ -112,3 +112,12 @@ fn test_matrix_reshape() {
   assert_eq!(mat[0][2], 3.0);
   assert_eq!(mat[0][3], 4.0);
 }
+
+#[test]
+fn test_matrix_eq() {
+  let elem1 = [1.0, 2.0, 3.0, 4.0];
+  let m1 = Matrix::from_elems(2, 2, elem1.as_slice());
+  let elem2 = [1.0, 3.0, 3.0, 4.0];
+  let m2 = Matrix::from_elems(2, 2, elem2.as_slice());
+  assert!(m1 != m2)
+}

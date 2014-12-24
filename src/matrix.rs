@@ -97,6 +97,22 @@ impl Mul<f64, Matrix> for Matrix {
   }
 }
 
+impl PartialEq for Matrix {
+  fn eq(&self, other: &Matrix) -> bool {
+    if self.num_rows() != other.num_rows() || self.num_cols() != other.num_cols() {
+      return false;
+    }
+    for i in range(0, self.data.len()) {
+      if self.data[i] != other.data[i] {
+        return false;
+      }
+    }
+    true
+  }
+}
+
+impl Eq for Matrix {}
+
 impl Matrix {
   #[inline]
   pub fn num_rows(&self) -> uint{
