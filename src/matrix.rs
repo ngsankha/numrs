@@ -1,4 +1,22 @@
 /// A 2D Matrix type composed of `f64` elements.
+///
+/// The Matrix type supports simple arithmetic operations from the start and
+/// provides convenient methods for accessing the elements of the matrix.
+///
+/// # Examples
+/// ```
+/// // Create a new 2x2 matrix with all values 0.0
+/// let m1 = Matrix::new(2, 2, 0.0);
+///
+/// // Creates a 2x2 matrix from the above vector in row major order
+/// let elems = [1.0, 2.0, 3.0, 4.0];
+/// let m2 = Matrix::from_elems(2, 2, elems.as_slice());
+///
+/// let res = m1 + m2; // add two matrices
+/// res = m1 - m2; // subtract 2 matrices
+/// res = m1 * m2; // matrix product of 2 matrices
+/// res = m2 * 5.0; // scalar product of a matrix
+/// ```
 
 pub struct Matrix {
   rows: uint,
@@ -114,16 +132,20 @@ impl PartialEq for Matrix {
 impl Eq for Matrix {}
 
 impl Matrix {
+  /// Returns the number of rows in the matrix.
   #[inline]
   pub fn num_rows(&self) -> uint{
     self.rows
   }
 
+  /// Returns the number of columns in the matrix.
   #[inline]
   pub fn num_cols(&self) -> uint {
     self.cols
   }
 
+  /// Returns the element at `i`th row and `j`th column of the matrix.
+  /// The row, column indexing is 0-based.
   #[inline]
   pub fn get(&self, i: uint, j: uint) -> f64 {
     if i < self.num_rows() && j < self.num_cols() {
@@ -133,6 +155,8 @@ impl Matrix {
     }
   }
 
+  /// Sets the element at `i`th row and `j`th column of the matrix as `num`.
+  /// The row, column indexing is 0-based.
   #[inline]
   pub fn set(&mut self, i: uint, j: uint, num: f64) {
     if i < self.num_rows() && j < self.num_cols() {
@@ -142,6 +166,8 @@ impl Matrix {
     }
   }
 
+  /// Creates a new `Matrix` with dimensions as `rows x cols` with all values
+  /// instantiated to `default`.
   pub fn new(rows: uint, cols: uint, default: f64) -> Matrix {
     Matrix {
       rows: rows,
@@ -150,28 +176,8 @@ impl Matrix {
     }
   }
 
-  pub fn from_elems(rows: uint, cols: uint, elems: &[f64]) -> Matrix {
-    let mut m = Matrix {
-      rows: rows,
-      cols: cols,
-      data: Vec::new()
-    };
-    m.data.push_all(elems);
-    m
-  }
-
-  pub fn identity(n: uint) -> Matrix {
-    let mut m = Matrix {
-      rows: n,
-      cols: n,
-      data: Vec::from_elem(n * n, 0.0)
-    };
-    for i in range(0, n) {
-      m.set(i, i, 1.0);
-    }
-    m
-  }
-
+  /// Resizes the dimensions of the matrix with the new dimensions as
+  /// `newrows x newcols`.
   pub fn reshape(&mut self, newrows: uint, newcols: uint) {
     if self.rows * self.cols == newrows * newcols {
       self.rows = newrows;
@@ -181,10 +187,12 @@ impl Matrix {
     }
   }
 
+  /// Returns the matrix as a cloned vector in row major order.
   pub fn get_vec(&self) -> Vec<f64> {
     self.data.clone()
   }
 
+  /// Transposes the matrix.
   pub fn transpose(&mut self) {
     let mut v = self.data.clone();
     for i in range(0, self.num_rows()) {
@@ -194,4 +202,29 @@ impl Matrix {
     }
     self.data = v;
   }
+}
+
+/// Creates a `Matrix` with dimensions `rows x cols` from the elements of the
+/// slice `elems`.
+pub fn from_elems(rows: uint, cols: uint, elems: &[f64]) -> Matrix {
+  let mut m = Matrix {
+    rows: rows,
+    cols: cols,
+    data: Vec::new()
+  };
+  m.data.push_all(elems);
+  m
+}
+
+/// Creates an identity matrix of dimension `n x n`.
+pub fn identity(n: uint) -> Matrix {
+  let mut m = Matrix {
+    rows: n,
+    cols: n,
+    data: Vec::from_elem(n * n, 0.0)
+  };
+  for i in range(0, n) {
+    m.set(i, i, 1.0);
+  }
+  m
 }
