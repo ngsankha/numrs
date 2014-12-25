@@ -202,6 +202,18 @@ impl Matrix {
     }
     self.data = v;
   }
+
+  /// Trace of the matrix.
+  pub fn trace(&self) -> f64 {
+    if self.num_rows() == self.num_cols() {
+      let mut sum: f64 = 0.0;
+      for i in range(0, self.num_rows()) {
+        sum += self.get(i, i);
+      }
+      return sum;
+    }
+    panic!("The matrix should be a square matrix.")
+  }
 }
 
 /// Creates a `Matrix` with dimensions `rows x cols` from the elements of the

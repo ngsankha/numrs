@@ -122,3 +122,10 @@ fn test_matrix_eq() {
   let m2 = matrix::from_elems(2, 2, elem2.as_slice());
   assert!(m1 != m2)
 }
+
+#[test]
+fn test_matrix_trace() {
+  let elems = [1.0, 2.0, 3.0, 4.0];
+  let mat = matrix::from_elems(2, 2, elems.as_slice());
+  assert_eq!(mat.trace(), 5.0);
+}
