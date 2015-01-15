@@ -5,28 +5,35 @@
 ///
 /// # Examples
 /// ```
+/// use numrs::matrix;
+/// use numrs::matrix::Matrix;
+///
 /// // Create a new 2x2 matrix with all values 0.0
 /// let m1 = Matrix::new(2, 2, 0.0);
 ///
 /// // Creates a 2x2 matrix from the above vector in row major order
 /// let elems = [1.0, 2.0, 3.0, 4.0];
-/// let m2 = Matrix::from_elems(2, 2, elems.as_slice());
+/// let m2 = matrix::from_elems(2, 2, elems.as_slice());
 ///
-/// let res = m1 + m2; // add two matrices
-/// res = m1 - m2; // subtract 2 matrices
-/// res = m1 * m2; // matrix product of 2 matrices
-/// res = m2 * 5.0; // scalar product of a matrix
+/// let mut res = m1.clone() + m2.clone(); // add two matrices
+/// res = m1.clone() - m2.clone(); // subtract 2 matrices
+/// res = m1.clone() * m2.clone(); // matrix product of 2 matrices
+/// res = m2.clone() * 5.0; // scalar product of a matrix
 /// ```
 
+use std::ops::{Index, Add, Sub, Mul, Neg};
+
 pub struct Matrix {
-  rows: uint,
-  cols: uint,
+  rows: usize,
+  cols: usize,
   data: Vec<f64>
 }
 
-impl Index<uint, [f64]> for Matrix {
+impl Index<usize> for Matrix {
+  type Output = [f64];
+
   #[inline]
-  fn index<'a>(&'a self, index: &uint) -> &'a [f64] {
+  fn index<'a>(&'a self, index: &usize) -> &'a [f64] {
     self.data.as_slice().slice(self.rows * *index, self.rows * *index + self.cols)
   }
 }
@@ -47,7 +54,9 @@ impl Clone for Matrix {
   }
 }
 
-impl Add<Matrix, Matrix> for Matrix {
+impl Add<Matrix> for Matrix {
+  type Output = Matrix;
+
   fn add(self, rhs: Matrix) -> Matrix {
     if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
       let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
@@ -61,7 +70,9 @@ impl Add<Matrix, Matrix> for Matrix {
   }
 }
 
-impl Sub<Matrix, Matrix> for Matrix {
+impl Sub<Matrix> for Matrix {
+  type Output = Matrix;
+
   fn sub(self, rhs: Matrix) -> Matrix {
     if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
       let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
@@ -75,7 +86,9 @@ impl Sub<Matrix, Matrix> for Matrix {
   }
 }
 
-impl Mul<Matrix, Matrix> for Matrix {
+impl Mul<Matrix> for Matrix {
+  type Output = Matrix;
+
   fn mul(self, rhs: Matrix) -> Matrix {
     if self.num_cols() == rhs.num_rows() {
       let mut new_mat = Matrix::new(self.num_rows(), rhs.num_cols(), 0.0);
@@ -95,7 +108,9 @@ impl Mul<Matrix, Matrix> for Matrix {
   }
 }
 
-impl Neg<Matrix> for Matrix {
+impl Neg for Matrix {
+  type Output = Matrix;
+
   fn neg(self) -> Matrix {
     let mut m = self.clone();
     for i in range(0, self.data.len()) {
@@ -105,7 +120,9 @@ impl Neg<Matrix> for Matrix {
   }
 }
 
-impl Mul<f64, Matrix> for Matrix {
+impl Mul<f64> for Matrix {
+  type Output = Matrix;
+
   fn mul(self, rhs: f64) -> Matrix {
     let mut m = self.clone();
     for i in range(0, self.data.len()) {
@@ -134,51 +151,55 @@ impl Eq for Matrix {}
 impl Matrix {
   /// Returns the number of rows in the matrix.
   #[inline]
-  pub fn num_rows(&self) -> uint{
+  pub fn num_rows(&self) -> usize{
     self.rows
   }
 
   /// Returns the number of columns in the matrix.
   #[inline]
-  pub fn num_cols(&self) -> uint {
+  pub fn num_cols(&self) -> usize {
     self.cols
   }
 
   /// Returns the element at `i`th row and `j`th column of the matrix.
   /// The row, column indexing is 0-based.
   #[inline]
-  pub fn get(&self, i: uint, j: uint) -> f64 {
+  pub fn get(&self, i: usize, j: usize) -> f64 {
     if i < self.num_rows() && j < self.num_cols() {
       self.data[i * self.num_cols() + j]
     } else {
-      panic!(format!("Matrix index {} out of bounds.", (i, j)))
+      panic!(format!("Matrix index ({}, {}) out of bounds.", i, j))
     }
   }
 
   /// Sets the element at `i`th row and `j`th column of the matrix as `num`.
   /// The row, column indexing is 0-based.
   #[inline]
-  pub fn set(&mut self, i: uint, j: uint, num: f64) {
+  pub fn set(&mut self, i: usize, j: usize, num: f64) {
     if i < self.num_rows() && j < self.num_cols() {
       self.data.as_mut_slice()[i * self.num_cols() + j] = num
     } else {
-      panic!(format!("Matrix index {} out of bounds.", (i, j)))
+      panic!(format!("Matrix index ({}, {}) out of bounds.", i, j))
     }
   }
 
   /// Creates a new `Matrix` with dimensions as `rows x cols` with all values
   /// instantiated to `default`.
-  pub fn new(rows: uint, cols: uint, default: f64) -> Matrix {
+  pub fn new(rows: usize, cols: usize, default: f64) -> Matrix {
+    let mut d: Vec<f64> = Vec::with_capacity(rows * cols);
+    for i in range(0, rows * cols) {
+      d.push(default);
+    }
     Matrix {
       rows: rows,
       cols: cols,
-      data: Vec::from_elem(rows * cols, default)
+      data: d
     }
   }
 
   /// Resizes the dimensions of the matrix with the new dimensions as
   /// `newrows x newcols`.
-  pub fn reshape(&mut self, newrows: uint, newcols: uint) {
+  pub fn reshape(&mut self, newrows: usize, newcols: usize) {
     if self.rows * self.cols == newrows * newcols {
       self.rows = newrows;
       self.cols = newcols;
@@ -218,7 +239,7 @@ impl Matrix {
 
 /// Creates a `Matrix` with dimensions `rows x cols` from the elements of the
 /// slice `elems`.
-pub fn from_elems(rows: uint, cols: uint, elems: &[f64]) -> Matrix {
+pub fn from_elems(rows: usize, cols: usize, elems: &[f64]) -> Matrix {
   let mut m = Matrix {
     rows: rows,
     cols: cols,
@@ -229,12 +250,8 @@ pub fn from_elems(rows: uint, cols: uint, elems: &[f64]) -> Matrix {
 }
 
 /// Creates an identity matrix of dimension `n x n`.
-pub fn identity(n: uint) -> Matrix {
-  let mut m = Matrix {
-    rows: n,
-    cols: n,
-    data: Vec::from_elem(n * n, 0.0)
-  };
+pub fn identity(n: usize) -> Matrix {
+  let mut m = Matrix::new(n, n, 0.0);
   for i in range(0, n) {
     m.set(i, i, 1.0);
   }
