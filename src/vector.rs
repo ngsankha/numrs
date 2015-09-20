@@ -43,6 +43,46 @@ impl<T: Float> Clone for Vector<T> {
   }
 }
 
+impl PartialEq for Vector<f32> {
+  fn eq(&self, other: &Vector<f32>) -> bool {
+    if self.data.len() == other.data.len() {
+      let lhs_data = self.data.as_slice();
+      let rhs_data = other.data.as_slice();
+      for i in (0..self.data.len()).step_by(4) {
+        let reg1: f32x4;
+        let reg2: f32x4;
+        if self.data.len() - i < 4 {
+          let (mut x1, mut x2, mut x3) = (0.0_f32, 0.0_f32, 0.0_f32);
+          let (mut y1, mut y2, mut y3) = (0.0_f32, 0.0_f32, 0.0_f32);
+          for j in i..self.data.len() {
+            let diff = self.data.len() - j;
+            match diff {
+              1 => { x1 = lhs_data[j]; y1 = rhs_data[j] },
+              2 => { x2 = lhs_data[j]; y2 = rhs_data[j] },
+              3 => { x3 = lhs_data[j]; y3 = rhs_data[j] },
+              _ => { unreachable!() }
+            }
+          }
+          reg1 = f32x4::new(x1, x2, x3, 0.0_f32);
+          reg2 = f32x4::new(y1, y2, y3, 0.0_f32);
+        } else {
+          reg1 = f32x4::load(lhs_data, i);
+          reg2 = f32x4::load(rhs_data, i);
+        }
+        let res = reg1.eq(reg2);
+        if !res.all() {
+          return false;
+        }
+      }
+      true
+    } else {
+      false
+    }
+  }
+}
+
+impl Eq for Vector<f32> {}
+
 impl Add<Vector<f32>> for Vector<f32> {
   type Output = Result<Vector<f32>, String>;
 
@@ -53,8 +93,8 @@ impl Add<Vector<f32>> for Vector<f32> {
       let rhs_data = rhs.data.as_slice();
       for i in (0..self.data.len()).step_by(4) {
         let mut reg_len = 4;
-        let mut reg1: f32x4;
-        let mut reg2: f32x4;
+        let reg1: f32x4;
+        let reg2: f32x4;
         if self.data.len() - i < 4 {
           let (mut x1, mut x2, mut x3) = (0.0_f32, 0.0_f32, 0.0_f32);
           let (mut y1, mut y2, mut y3) = (0.0_f32, 0.0_f32, 0.0_f32);
