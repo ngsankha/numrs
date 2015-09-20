@@ -16,7 +16,7 @@ fn test_vector_add() {
   let arr = [1.0, 2.0, 3.0, 4.0, 5.0];
   let v1 = Vector::<f32>::new(&arr);
   let v2 = Vector::<f32>::new(&arr);
-  let res = v1 + v2;
+  let res = (v1 + v2).unwrap();
   assert_eq!(res[0], 2.0);
   assert_eq!(res[1], 4.0);
   assert_eq!(res[2], 6.0);

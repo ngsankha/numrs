@@ -32,9 +32,9 @@ impl<T: Float> Index<usize> for Vector<T> {
 }
 
 impl Add<Vector<f32>> for Vector<f32> {
-  type Output = Vector<f32>;
+  type Output = Result<Vector<f32>, String>;
 
-  fn add(self, rhs: Vector<f32>) -> Vector<f32> {
+  fn add(self, rhs: Vector<f32>) -> Result<Vector<f32>, String> {
     if self.data.len() == rhs.data.len() {
       let mut new_vec = Vec::new();
       let lhs_data = self.data.as_slice();
@@ -53,7 +53,7 @@ impl Add<Vector<f32>> for Vector<f32> {
               1 => { x1 = lhs_data[j]; y1 = rhs_data[j] },
               2 => { x2 = lhs_data[j]; y2 = rhs_data[j] },
               3 => { x3 = lhs_data[j]; y3 = rhs_data[j] },
-              _ => {}
+              _ => { unreachable!() }
             }
           }
           reg1 = f32x4::new(x1, x2, x3, 0.0_f32);
@@ -67,9 +67,9 @@ impl Add<Vector<f32>> for Vector<f32> {
           new_vec.push(res.extract(j as u32));
         }
       }
-      Vector::<f32> { data: new_vec }
+      Ok(Vector::<f32> { data: new_vec })
     } else {
-      panic!("Vectors are not conformable for addition.");
+      Err("Vectors are not conformable for addition.".to_string())
     }
   }
 }
