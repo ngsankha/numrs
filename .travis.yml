@@ -16,7 +16,7 @@ script:
   - |
     travis-cargo build &&
     travis-cargo test &&
-    travis-cargo doc -- --features doc
+    travis-cargo doc
 
 env:
   global:
