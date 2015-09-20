@@ -13,7 +13,7 @@
 ///
 /// // Creates a 2x2 matrix from the above vector in row major order
 /// let elems = [1.0, 2.0, 3.0, 4.0];
-/// let m2 = matrix::from_elems(2, 2, elems.as_slice());
+/// let m2 = matrix::from_elems(2, 2, &elems);
 ///
 /// let mut res = m1.clone() + m2.clone(); // add two matrices
 /// res = m1.clone() - m2.clone(); // subtract 2 matrices
@@ -33,8 +33,8 @@ impl Index<usize> for Matrix {
   type Output = [f64];
 
   #[inline]
-  fn index<'a>(&'a self, index: &usize) -> &'a [f64] {
-    self.data.as_slice().slice(self.rows * *index, self.rows * *index + self.cols)
+  fn index<'a>(&'a self, index: usize) -> &'a [f64] {
+    &self.data[self.rows * index..self.rows * index + self.cols]
   }
 }
 
@@ -60,7 +60,7 @@ impl Add<Matrix> for Matrix {
   fn add(self, rhs: Matrix) -> Matrix {
     if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
       let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
-      for i in range(0, self.data.len()) {
+      for i in 0..self.data.len() {
         new_mat.data[i] = self.data[i] + rhs.data[i];
       }
       new_mat
@@ -76,7 +76,7 @@ impl Sub<Matrix> for Matrix {
   fn sub(self, rhs: Matrix) -> Matrix {
     if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
       let mut new_mat = Matrix::new(self.num_rows(), self.num_cols(), 0.0);
-      for i in range(0, self.data.len()) {
+      for i in 0..self.data.len() {
         new_mat.data[i] = self.data[i] - rhs.data[i];
       }
       new_mat
@@ -92,10 +92,10 @@ impl Mul<Matrix> for Matrix {
   fn mul(self, rhs: Matrix) -> Matrix {
     if self.num_cols() == rhs.num_rows() {
       let mut new_mat = Matrix::new(self.num_rows(), rhs.num_cols(), 0.0);
-      for i in range(0, self.num_rows()) {
-        for j in range(0, rhs.num_cols()) {
+      for i in 0..self.num_rows() {
+        for j in 0..rhs.num_cols() {
           let mut sum: f64 = 0.0;
-          for k in range(0, self.num_cols()) {
+          for k in 0..self.num_cols() {
             sum += self.get(i, k) * rhs.get(k, j);
           }
           new_mat.set(i, j, sum);
@@ -113,7 +113,7 @@ impl Neg for Matrix {
 
   fn neg(self) -> Matrix {
     let mut m = self.clone();
-    for i in range(0, self.data.len()) {
+    for i in 0..self.data.len() {
       m.data[i] = -self.data[i];
     }
     m
@@ -125,7 +125,7 @@ impl Mul<f64> for Matrix {
 
   fn mul(self, rhs: f64) -> Matrix {
     let mut m = self.clone();
-    for i in range(0, self.data.len()) {
+    for i in 0..self.data.len() {
       m.data[i] = rhs * self.data[i];
     }
     m
@@ -137,7 +137,7 @@ impl PartialEq for Matrix {
     if self.num_rows() != other.num_rows() || self.num_cols() != other.num_cols() {
       return false;
     }
-    for i in range(0, self.data.len()) {
+    for i in 0..self.data.len() {
       if self.data[i] != other.data[i] {
         return false;
       }
@@ -176,8 +176,9 @@ impl Matrix {
   /// The row, column indexing is 0-based.
   #[inline]
   pub fn set(&mut self, i: usize, j: usize, num: f64) {
-    if i < self.num_rows() && j < self.num_cols() {
-      self.data.as_mut_slice()[i * self.num_cols() + j] = num
+    let (rows, cols) = (self.num_rows(), self.num_cols());
+    if i < rows && j < cols {
+      self.data[i * cols + j] = num
     } else {
       panic!(format!("Matrix index ({}, {}) out of bounds.", i, j))
     }
@@ -187,7 +188,7 @@ impl Matrix {
   /// instantiated to `default`.
   pub fn new(rows: usize, cols: usize, default: f64) -> Matrix {
     let mut d: Vec<f64> = Vec::with_capacity(rows * cols);
-    for i in range(0, rows * cols) {
+    for i in 0..rows * cols {
       d.push(default);
     }
     Matrix {
@@ -216,8 +217,8 @@ impl Matrix {
   /// Transposes the matrix.
   pub fn transpose(&mut self) {
     let mut v = self.data.clone();
-    for i in range(0, self.num_rows()) {
-      for j in range(0, self.num_cols()) {
+    for i in 0..self.num_rows() {
+      for j in 0..self.num_cols() {
         v[j * self.num_cols() + i] = self.get(i, j);
       }
     }
@@ -228,7 +229,7 @@ impl Matrix {
   pub fn trace(&self) -> f64 {
     if self.num_rows() == self.num_cols() {
       let mut sum: f64 = 0.0;
-      for i in range(0, self.num_rows()) {
+      for i in 0..self.num_rows() {
         sum += self.get(i, i);
       }
       return sum;
@@ -245,14 +246,14 @@ pub fn from_elems(rows: usize, cols: usize, elems: &[f64]) -> Matrix {
     cols: cols,
     data: Vec::new()
   };
-  m.data.push_all(elems);
+  m.data.extend(elems);
   m
 }
 
 /// Creates an identity matrix of dimension `n x n`.
 pub fn identity(n: usize) -> Matrix {
   let mut m = Matrix::new(n, n, 0.0);
-  for i in range(0, n) {
+  for i in 0..n {
     m.set(i, i, 1.0);
   }
   m

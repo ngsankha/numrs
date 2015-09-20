@@ -17,8 +17,8 @@ fn test_basic_matrix() {
 #[test]
 fn test_identity_matrix() {
   let m = matrix::identity(5);
-  for i in range(0, 5) {
-    for j in range(0, 5) {
+  for i in 0..5 {
+    for j in 0..5 {
       if i == j {
         assert_eq!(m.get(i, j), 1.0);
       } else {
@@ -31,8 +31,8 @@ fn test_identity_matrix() {
 #[test]
 fn test_matrix_add() {
   let elems = [1.0, 2.0, 3.0, 4.0];
-  let m1 = matrix::from_elems(2, 2, elems.as_slice());
-  let m2 = matrix::from_elems(2, 2, elems.as_slice());
+  let m1 = matrix::from_elems(2, 2, &elems);
+  let m2 = matrix::from_elems(2, 2, &elems);
   let res = m1 + m2;
 
   assert_eq!(res[0][0], 2.0);
@@ -44,8 +44,8 @@ fn test_matrix_add() {
 #[test]
 fn test_matrix_multiply() {
   let elems = [1.0, 2.0, 3.0, 4.0];
-  let m1 = matrix::from_elems(2, 2, elems.as_slice());
-  let m2 = matrix::from_elems(2, 2, elems.as_slice());
+  let m1 = matrix::from_elems(2, 2, &elems);
+  let m2 = matrix::from_elems(2, 2, &elems);
   let res = m1 * m2;
 
   assert_eq!(res[0][0], 7.0);
@@ -57,7 +57,7 @@ fn test_matrix_multiply() {
 #[test]
 fn test_scalar_multiply() {
   let elems = [1.0, 2.0, 3.0, 4.0];
-  let m = matrix::from_elems(2, 2, elems.as_slice());
+  let m = matrix::from_elems(2, 2, &elems);
 
   let mut m_ = -m.clone();
   assert_eq!(m_[0][0], -1.0);
@@ -75,7 +75,7 @@ fn test_scalar_multiply() {
 #[test]
 fn test_matrix_index() {
   let elems = [16.0, 3.0, 7.0, -11.0];
-  let mat = matrix::from_elems(2, 2, elems.as_slice());
+  let mat = matrix::from_elems(2, 2, &elems);
   assert_eq!(mat[0].len(), 2);
   assert_eq!(mat[0][0], 16.0);
   assert_eq!(mat[0][1], 3.0);
@@ -84,7 +84,7 @@ fn test_matrix_index() {
 #[test]
 fn test_matrix_clone() {
   let elems = [16.0, 3.0, 7.0, -11.0];
-  let mat = matrix::from_elems(2, 2, elems.as_slice());
+  let mat = matrix::from_elems(2, 2, &elems);
   let m = mat.clone();
   assert_eq!(m[0][0], 16.0);
   assert_eq!(m[0][1], 3.0);
@@ -95,7 +95,7 @@ fn test_matrix_clone() {
 #[test]
 fn test_matrix_transpose() {
   let elems = [1.0, 2.0, 3.0, 4.0];
-  let mut mat = matrix::from_elems(2, 2, elems.as_slice());
+  let mut mat = matrix::from_elems(2, 2, &elems);
   mat.transpose();
   assert_eq!(mat[0][0], 1.0);
   assert_eq!(mat[0][1], 3.0);
@@ -106,7 +106,7 @@ fn test_matrix_transpose() {
 #[test]
 fn test_matrix_reshape() {
   let elems = [1.0, 2.0, 3.0, 4.0];
-  let mut mat = matrix::from_elems(2, 2, elems.as_slice());
+  let mut mat = matrix::from_elems(2, 2, &elems);
   mat.reshape(1, 4);
   assert_eq!(mat[0][0], 1.0);
   assert_eq!(mat[0][1], 2.0);
@@ -117,15 +117,15 @@ fn test_matrix_reshape() {
 #[test]
 fn test_matrix_eq() {
   let elem1 = [1.0, 2.0, 3.0, 4.0];
-  let m1 = matrix::from_elems(2, 2, elem1.as_slice());
+  let m1 = matrix::from_elems(2, 2, &elem1);
   let elem2 = [1.0, 3.0, 3.0, 4.0];
-  let m2 = matrix::from_elems(2, 2, elem2.as_slice());
+  let m2 = matrix::from_elems(2, 2, &elem2);
   assert!(m1 != m2)
 }
 
 #[test]
 fn test_matrix_trace() {
   let elems = [1.0, 2.0, 3.0, 4.0];
-  let mat = matrix::from_elems(2, 2, elems.as_slice());
+  let mat = matrix::from_elems(2, 2, &elems);
   assert_eq!(mat.trace(), 5.0);
 }
