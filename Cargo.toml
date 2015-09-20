@@ -1,7 +1,14 @@
 [package]
 name = "numrs"
-version = "0.0.1"
+version = "0.1.0"
 authors = [ "Sankha Narayan Guria <sankha93@gmail.com>" ]
+license = "MIT"
+description = "A numerical computations library for Rust"
+documentation = "http://sankhs.com/numrs"
+homepage = "https://github.com/sankha93/numrs"
+repository = "https://github.com/sankha93/numrs"
+readme = "README.md"
+keywords = ["math", "mathematics", "numerical", "scientific", "computation"]
 
 [lib]
 name = "numrs"
