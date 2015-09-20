@@ -12,6 +12,17 @@ fn test_basic_vector() {
 }
 
 #[test]
+fn test_vector_clone() {
+  let arr = [1.0, 2.0, 3.0];
+  let v1 = Vector::<f32>::new(&arr);
+  let v2 = v1.clone();
+  assert_eq!(v1[0], v2[0]);
+  assert_eq!(v1[1], v2[1]);
+  assert_eq!(v1[2], v2[2]);
+  assert_eq!(v1.len(), v2.len());
+}
+
+#[test]
 fn test_vector_add() {
   let arr = [1.0, 2.0, 3.0, 4.0, 5.0];
   let v1 = Vector::<f32>::new(&arr);

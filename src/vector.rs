@@ -31,6 +31,18 @@ impl<T: Float> Index<usize> for Vector<T> {
   }
 }
 
+impl<T: Float> Clone for Vector<T> {
+  fn clone(&self) -> Vector<T> {
+    Vector::<T> {
+      data: self.data.clone()
+    }
+  }
+
+  fn clone_from(&mut self, source: &Vector<T>) {
+    self.data = source.data.clone();
+  }
+}
+
 impl Add<Vector<f32>> for Vector<f32> {
   type Output = Result<Vector<f32>, String>;
 
