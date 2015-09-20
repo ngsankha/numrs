@@ -1,7 +1,24 @@
 language: rust
-after_success: |
-    cargo doc \
-    && echo '<meta http-equiv=refresh content=0;url=numrs/index.html>' > target/doc/index.html && \
-    sudo pip install ghp-import && \
-    ghp-import -n target/doc && \
-    git push -qf https://${TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git gh-pages
+sudo: false
+
+after_success:
+  - travis-cargo --only nightly doc-upload
+
+rust:
+  - nightly
+
+before_script:
+  - |
+    pip install 'travis-cargo<0.2' --user &&
+    export PATH=$HOME/.local/bin:$PATH
+
+script:
+  - |
+    travis-cargo build &&
+    travis-cargo test &&
+    travis-cargo doc -- --features doc
+
+env:
+  global:
+    - TRAVIS_CARGO_NIGHTLY_FEATURE=""
+    - secure: dwfyUF9b0XYLOswqSNva73gbO1I5Hb8lToyNTP8UEkQEANGWkP3RMbTh8niZJ/1EGVNzTEEl4ni/AbJuLtoPuBL1hs1ksSvDPw6Up5x81sgK67PSkIUudySxa0fMhsHbQvils2xBl/a8ia5YLW0lNhzzfDQ1OCoORZ0ZzEZ3rmE=
