@@ -265,6 +265,43 @@ impl Mul<Vector<f32>> for Vector<f32> {
   }
 }
 
+impl Mul<f32> for Vector<f32> {
+  type Output = Vector<f32>;
+
+  fn mul(self, rhs: f32) -> Vector<f32> {
+    let mut new_vec = Vec::new();
+    let lhs_data = self.data.as_slice();
+    for i in (0..self.data.len()).step_by(4) {
+      let mut reg_len = 4;
+      let reg1: f32x4;
+      let reg2: f32x4;
+      if self.data.len() - i < 4 {
+        let (mut x1, mut x2, mut x3) = (0.0_f32, 0.0_f32, 0.0_f32);
+        reg_len = self.data.len() - i;
+        for j in i..self.data.len() {
+          let diff = self.data.len() - j;
+          match diff {
+            1 => { x1 = lhs_data[j] },
+            2 => { x2 = lhs_data[j] },
+            3 => { x3 = lhs_data[j] },
+            _ => { unreachable!() }
+          }
+        }
+        reg1 = f32x4::new(x1, x2, x3, 0.0_f32);
+        reg2 = f32x4::splat(rhs);
+      } else {
+        reg1 = f32x4::load(lhs_data, i);
+        reg2 = f32x4::splat(rhs);
+      }
+      let res = reg1 * reg2;
+      for j in 0..reg_len {
+        new_vec.push(res.extract(j as u32));
+      }
+    }
+    Vector::<f32> { data: new_vec }
+  }
+}
+
 impl Div<Vector<f32>> for Vector<f32> {
   type Output = Result<Vector<f32>, String>;
 
@@ -308,6 +345,42 @@ impl Div<Vector<f32>> for Vector<f32> {
   }
 }
 
+impl Div<f32> for Vector<f32> {
+  type Output = Vector<f32>;
+
+  fn div(self, rhs: f32) -> Vector<f32> {
+    let mut new_vec = Vec::new();
+    let lhs_data = self.data.as_slice();
+    for i in (0..self.data.len()).step_by(4) {
+      let mut reg_len = 4;
+      let reg1: f32x4;
+      let reg2: f32x4;
+      if self.data.len() - i < 4 {
+        let (mut x1, mut x2, mut x3) = (0.0_f32, 0.0_f32, 0.0_f32);
+        reg_len = self.data.len() - i;
+        for j in i..self.data.len() {
+          let diff = self.data.len() - j;
+          match diff {
+            1 => { x1 = lhs_data[j] },
+            2 => { x2 = lhs_data[j] },
+            3 => { x3 = lhs_data[j] },
+            _ => { unreachable!() }
+          }
+        }
+        reg1 = f32x4::new(x1, x2, x3, 0.0_f32);
+        reg2 = f32x4::splat(rhs);
+      } else {
+        reg1 = f32x4::load(lhs_data, i);
+        reg2 = f32x4::splat(rhs);
+      }
+      let res = reg1 / reg2;
+      for j in 0..reg_len {
+        new_vec.push(res.extract(j as u32));
+      }
+    }
+    Vector::<f32> { data: new_vec }
+  }
+}
 
 impl Eq for Vector<f64> {}
 
@@ -458,6 +531,33 @@ impl Mul<Vector<f64>> for Vector<f64> {
   }
 }
 
+impl Mul<f64> for Vector<f64> {
+  type Output = Vector<f64>;
+
+  fn mul(self, rhs: f64) -> Vector<f64> {
+    let mut new_vec = Vec::new();
+    let lhs_data = self.data.as_slice();
+    for i in (0..self.data.len()).step_by(2) {
+      let mut reg_len = 2;
+      let reg1: f64x2;
+      let reg2: f64x2;
+      if self.data.len() - i < 2 {
+        reg_len = 1;
+        reg1 = f64x2::new(lhs_data[i], 0.0_f64);
+        reg2 = f64x2::splat(rhs);
+      } else {
+        reg1 = f64x2::load(lhs_data, i);
+        reg2 = f64x2::splat(rhs);
+      }
+      let res = reg1 * reg2;
+      for j in 0..reg_len {
+        new_vec.push(res.extract(j as u32));
+      }
+    }
+    Vector::<f64> { data: new_vec }
+  }
+}
+
 impl Div<Vector<f64>> for Vector<f64> {
   type Output = Result<Vector<f64>, String>;
 
@@ -487,5 +587,32 @@ impl Div<Vector<f64>> for Vector<f64> {
     } else {
       Err("Vectors are not conformable for division.".to_string())
     }
+  }
+}
+
+impl Div<f64> for Vector<f64> {
+  type Output = Vector<f64>;
+
+  fn div(self, rhs: f64) -> Vector<f64> {
+    let mut new_vec = Vec::new();
+    let lhs_data = self.data.as_slice();
+    for i in (0..self.data.len()).step_by(2) {
+      let mut reg_len = 2;
+      let reg1: f64x2;
+      let reg2: f64x2;
+      if self.data.len() - i < 2 {
+        reg_len = 1;
+        reg1 = f64x2::new(lhs_data[i], 0.0_f64);
+        reg2 = f64x2::splat(rhs);
+      } else {
+        reg1 = f64x2::load(lhs_data, i);
+        reg2 = f64x2::splat(rhs);
+      }
+      let res = reg1 / reg2;
+      for j in 0..reg_len {
+        new_vec.push(res.extract(j as u32));
+      }
+    }
+    Vector::<f64> { data: new_vec }
   }
 }

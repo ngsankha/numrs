@@ -63,12 +63,38 @@ fn test_vector_mul() {
 }
 
 #[test]
+fn test_vector_scalar_mul() {
+  let arr = [1.0, 2.0, 3.0, 4.0, 5.0];
+  let v = Vector::<f32>::new(&arr);
+  let res = v * 2.0;
+  assert_eq!(res[0], 2.0);
+  assert_eq!(res[1], 4.0);
+  assert_eq!(res[2], 6.0);
+  assert_eq!(res[3], 8.0);
+  assert_eq!(res[4], 10.0);
+  assert_eq!(res.len(), 5);
+}
+
+#[test]
 fn test_vector_div() {
   let arr1 = [2.0, 4.0, 6.0, 8.0, 10.0];
   let arr2 = [2.0, 2.0, 2.0, 2.0, 2.0];
   let v1 = Vector::<f32>::new(&arr1);
   let v2 = Vector::<f32>::new(&arr2);
   let res = (v1 / v2).unwrap();
+  assert_eq!(res[0], 1.0);
+  assert_eq!(res[1], 2.0);
+  assert_eq!(res[2], 3.0);
+  assert_eq!(res[3], 4.0);
+  assert_eq!(res[4], 5.0);
+  assert_eq!(res.len(), 5);
+}
+
+#[test]
+fn test_vector_scalar_div() {
+  let arr = [2.0, 4.0, 6.0, 8.0, 10.0];
+  let v = Vector::<f32>::new(&arr);
+  let res = v / 2.0;
   assert_eq!(res[0], 1.0);
   assert_eq!(res[1], 2.0);
   assert_eq!(res[2], 3.0);
@@ -152,12 +178,38 @@ fn test_vector_mul_f64() {
 }
 
 #[test]
+fn test_vector_scalar_mul_f64() {
+  let arr = [1.0, 2.0, 3.0, 4.0, 5.0];
+  let v = Vector::<f64>::new(&arr);
+  let res = v * 2.0_f64;
+  assert_eq!(res[0], 2.0);
+  assert_eq!(res[1], 4.0);
+  assert_eq!(res[2], 6.0);
+  assert_eq!(res[3], 8.0);
+  assert_eq!(res[4], 10.0);
+  assert_eq!(res.len(), 5);
+}
+
+#[test]
 fn test_vector_div_f64() {
   let arr1 = [2.0, 4.0, 6.0, 8.0, 10.0];
   let arr2 = [2.0, 2.0, 2.0, 2.0, 2.0];
   let v1 = Vector::<f64>::new(&arr1);
   let v2 = Vector::<f64>::new(&arr2);
   let res = (v1 / v2).unwrap();
+  assert_eq!(res[0], 1.0);
+  assert_eq!(res[1], 2.0);
+  assert_eq!(res[2], 3.0);
+  assert_eq!(res[3], 4.0);
+  assert_eq!(res[4], 5.0);
+  assert_eq!(res.len(), 5);
+}
+
+#[test]
+fn test_vector_scalar_div_f64() {
+  let arr = [2.0, 4.0, 6.0, 8.0, 10.0];
+  let v = Vector::<f64>::new(&arr);
+  let res = v / 2.0_f64;
   assert_eq!(res[0], 1.0);
   assert_eq!(res[1], 2.0);
   assert_eq!(res[2], 3.0);
