@@ -1,3 +1,21 @@
+/// A Vector type composed of `f32` or `f64` elements.
+///
+/// The Vector type supports simple vector operations like addition,
+/// subtraction, etc. All the operations are backed by SIMD vectorized
+/// instructions for very fast execution.
+///
+/// # Examples
+/// ```
+/// use numrs::vector::Vector;
+///
+/// // Creates a vector of 32-bit floating point numbers.
+/// let elems = [1.0, 2.0, 3.0, 4.0];
+/// let v = Vector::<f32>::new(&elems);
+///
+/// let mut res = v.clone() + v.clone(); // element-wise addition
+/// res = v.clone() * v.clone(); // element-wise multiplication
+/// ```
+
 extern crate num;
 extern crate simd;
 
