@@ -421,7 +421,7 @@ impl Sub<Vector<f64>> for Vector<f64> {
       }
       Ok(Vector::<f64> { data: new_vec })
     } else {
-      Err("Vectors are not conformable for addition.".to_string())
+      Err("Vectors are not conformable for subtraction.".to_string())
     }
   }
 }
@@ -453,7 +453,7 @@ impl Mul<Vector<f64>> for Vector<f64> {
       }
       Ok(Vector::<f64> { data: new_vec })
     } else {
-      Err("Vectors are not conformable for addition.".to_string())
+      Err("Vectors are not conformable for multiplication.".to_string())
     }
   }
 }
@@ -485,7 +485,7 @@ impl Div<Vector<f64>> for Vector<f64> {
       }
       Ok(Vector::<f64> { data: new_vec })
     } else {
-      Err("Vectors are not conformable for addition.".to_string())
+      Err("Vectors are not conformable for division.".to_string())
     }
   }
 }
