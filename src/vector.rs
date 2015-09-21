@@ -1,3 +1,11 @@
+extern crate num;
+extern crate simd;
+
+use self::num::traits::Float;
+use std::ops::{Index, Add, Sub, Mul, Div, Neg};
+use self::simd::f32x4;
+use self::simd::x86::sse2::f64x2;
+
 /// A Vector type composed of `f32` or `f64` elements.
 ///
 /// The Vector type supports simple vector operations like addition,
@@ -16,25 +24,20 @@
 /// res = v.clone() * v.clone(); // element-wise multiplication
 /// ```
 
-extern crate num;
-extern crate simd;
-
-use self::num::traits::Float;
-use std::ops::{Index, Add, Sub, Mul, Div, Neg};
-use self::simd::f32x4;
-use self::simd::x86::sse2::f64x2;
-
 pub struct Vector<T: Float> {
   data: Vec<T>
 }
 
 impl<T: Float> Vector<T> {
+
+  /// Create a new vector
   pub fn new(elems: &[T]) -> Vector<T> {
     let mut v = Vector::<T> { data: Vec::new() };
     v.data.extend(elems);
     v
   }
 
+  /// Get the length of a vector
   #[inline]
   pub fn len(&self) -> usize {
     self.data.len()
