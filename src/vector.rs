@@ -4,6 +4,7 @@ extern crate simd;
 use self::num::traits::Float;
 use std::ops::{Index, Add, Sub, Mul, Div, Neg};
 use self::simd::f32x4;
+use self::simd::x86::sse2::f64x2;
 
 pub struct Vector<T: Float> {
   data: Vec<T>
@@ -43,6 +44,8 @@ impl<T: Float> Clone for Vector<T> {
   }
 }
 
+impl Eq for Vector<f32> {}
+
 impl PartialEq for Vector<f32> {
   fn eq(&self, other: &Vector<f32>) -> bool {
     if self.data.len() == other.data.len() {
@@ -80,8 +83,6 @@ impl PartialEq for Vector<f32> {
     }
   }
 }
-
-impl Eq for Vector<f32> {}
 
 impl Add<Vector<f32>> for Vector<f32> {
   type Output = Result<Vector<f32>, String>;
@@ -285,6 +286,188 @@ impl Div<Vector<f32>> for Vector<f32> {
       Ok(Vector::<f32> { data: new_vec })
     } else {
       Err("Vectors are not conformable for division.".to_string())
+    }
+  }
+}
+
+
+impl Eq for Vector<f64> {}
+
+impl PartialEq for Vector<f64> {
+  fn eq(&self, other: &Vector<f64>) -> bool {
+    if self.data.len() == other.data.len() {
+      let lhs_data = self.data.as_slice();
+      let rhs_data = other.data.as_slice();
+      for i in (0..self.data.len()).step_by(2) {
+        let reg1: f64x2;
+        let reg2: f64x2;
+        if self.data.len() - i < 2 {
+          reg1 = f64x2::new(lhs_data[i], 0.0_f64);
+          reg2 = f64x2::new(rhs_data[i], 0.0_f64);
+        } else {
+          reg1 = f64x2::load(lhs_data, i);
+          reg2 = f64x2::load(rhs_data, i);
+        }
+        let res = reg1.eq(reg2);
+        if !res.all() {
+          return false;
+        }
+      }
+      true
+    } else {
+      false
+    }
+  }
+}
+
+impl Add<Vector<f64>> for Vector<f64> {
+  type Output = Result<Vector<f64>, String>;
+
+  fn add(self, rhs: Vector<f64>) -> Result<Vector<f64>, String> {
+    if self.data.len() == rhs.data.len() {
+      let mut new_vec = Vec::new();
+      let lhs_data = self.data.as_slice();
+      let rhs_data = rhs.data.as_slice();
+      for i in (0..self.data.len()).step_by(2) {
+        let mut reg_len = 2;
+        let reg1: f64x2;
+        let reg2: f64x2;
+        if self.data.len() - i < 2 {
+          reg_len = 1;
+          reg1 = f64x2::new(lhs_data[i], 0.0_f64);
+          reg2 = f64x2::new(rhs_data[i], 0.0_f64);
+        } else {
+          reg1 = f64x2::load(lhs_data, i);
+          reg2 = f64x2::load(rhs_data, i);
+        }
+        let res = reg1 + reg2;
+        for j in 0..reg_len {
+          new_vec.push(res.extract(j as u32));
+        }
+      }
+      Ok(Vector::<f64> { data: new_vec })
+    } else {
+      Err("Vectors are not conformable for addition.".to_string())
+    }
+  }
+}
+
+impl Neg for Vector<f64> {
+  type Output = Vector<f64>;
+
+  fn neg(self) -> Vector<f64> {
+    let mut new_vec = Vec::new();
+    let data = self.data.as_slice();
+    for i in (0..self.data.len()).step_by(2) {
+      let mut reg_len = 2;
+      let reg: f64x2;
+      if self.data.len() - i < 2 {
+        reg_len = 1;
+        reg = f64x2::new(data[i], 0.0_f64);
+      } else {
+        reg = f64x2::load(data, i);
+      }
+      let res = -reg;
+      for j in 0..reg_len {
+        new_vec.push(res.extract(j as u32));
+      }
+    }
+    Vector::<f64> { data: new_vec }
+  }
+}
+
+impl Sub<Vector<f64>> for Vector<f64> {
+  type Output = Result<Vector<f64>, String>;
+
+  fn sub(self, rhs: Vector<f64>) -> Result<Vector<f64>, String> {
+    if self.data.len() == rhs.data.len() {
+      let mut new_vec = Vec::new();
+      let lhs_data = self.data.as_slice();
+      let rhs_data = rhs.data.as_slice();
+      for i in (0..self.data.len()).step_by(2) {
+        let mut reg_len = 2;
+        let reg1: f64x2;
+        let reg2: f64x2;
+        if self.data.len() - i < 2 {
+          reg_len = 1;
+          reg1 = f64x2::new(lhs_data[i], 0.0_f64);
+          reg2 = f64x2::new(rhs_data[i], 0.0_f64);
+        } else {
+          reg1 = f64x2::load(lhs_data, i);
+          reg2 = f64x2::load(rhs_data, i);
+        }
+        let res = reg1 - reg2;
+        for j in 0..reg_len {
+          new_vec.push(res.extract(j as u32));
+        }
+      }
+      Ok(Vector::<f64> { data: new_vec })
+    } else {
+      Err("Vectors are not conformable for addition.".to_string())
+    }
+  }
+}
+
+impl Mul<Vector<f64>> for Vector<f64> {
+  type Output = Result<Vector<f64>, String>;
+
+  fn mul(self, rhs: Vector<f64>) -> Result<Vector<f64>, String> {
+    if self.data.len() == rhs.data.len() {
+      let mut new_vec = Vec::new();
+      let lhs_data = self.data.as_slice();
+      let rhs_data = rhs.data.as_slice();
+      for i in (0..self.data.len()).step_by(2) {
+        let mut reg_len = 2;
+        let reg1: f64x2;
+        let reg2: f64x2;
+        if self.data.len() - i < 2 {
+          reg_len = 1;
+          reg1 = f64x2::new(lhs_data[i], 0.0_f64);
+          reg2 = f64x2::new(rhs_data[i], 0.0_f64);
+        } else {
+          reg1 = f64x2::load(lhs_data, i);
+          reg2 = f64x2::load(rhs_data, i);
+        }
+        let res = reg1 * reg2;
+        for j in 0..reg_len {
+          new_vec.push(res.extract(j as u32));
+        }
+      }
+      Ok(Vector::<f64> { data: new_vec })
+    } else {
+      Err("Vectors are not conformable for addition.".to_string())
+    }
+  }
+}
+
+impl Div<Vector<f64>> for Vector<f64> {
+  type Output = Result<Vector<f64>, String>;
+
+  fn div(self, rhs: Vector<f64>) -> Result<Vector<f64>, String> {
+    if self.data.len() == rhs.data.len() {
+      let mut new_vec = Vec::new();
+      let lhs_data = self.data.as_slice();
+      let rhs_data = rhs.data.as_slice();
+      for i in (0..self.data.len()).step_by(2) {
+        let mut reg_len = 2;
+        let reg1: f64x2;
+        let reg2: f64x2;
+        if self.data.len() - i < 2 {
+          reg_len = 1;
+          reg1 = f64x2::new(lhs_data[i], 0.0_f64);
+          reg2 = f64x2::new(rhs_data[i], 0.0_f64);
+        } else {
+          reg1 = f64x2::load(lhs_data, i);
+          reg2 = f64x2::load(rhs_data, i);
+        }
+        let res = reg1 / reg2;
+        for j in 0..reg_len {
+          new_vec.push(res.extract(j as u32));
+        }
+      }
+      Ok(Vector::<f64> { data: new_vec })
+    } else {
+      Err("Vectors are not conformable for addition.".to_string())
     }
   }
 }
