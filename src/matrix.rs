@@ -1,5 +1,3 @@
-use std::ops::{Index, Add, Sub, Mul, Neg};
-
 /// A 2D Matrix type composed of `f64` elements.
 ///
 /// The Matrix type supports simple arithmetic operations from the start and
@@ -22,6 +20,8 @@ use std::ops::{Index, Add, Sub, Mul, Neg};
 /// res = m1.clone() * m2.clone(); // matrix product of 2 matrices
 /// res = m2.clone() * 5.0; // scalar product of a matrix
 /// ```
+
+use std::ops::{Index, Add, Sub, Mul, Neg};
 
 pub struct Matrix {
   rows: usize,

@@ -15,9 +15,3 @@ name = "numrs"
 path = "src/lib.rs"
 test = true
 doc = true
-
-[dependencies]
-num = "*"
-
-[dependencies.simd]
-git = "https://github.com/huonw/simd.git"
