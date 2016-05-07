@@ -190,10 +190,7 @@ impl<T: Num + Clone + Copy> Matrix<T> {
   /// Creates a new `Matrix` with dimensions as `rows x cols` with all values
   /// instantiated to `default`.
   pub fn new(rows: usize, cols: usize, default: T) -> Matrix<T> {
-    let mut d: Vec<T> = Vec::with_capacity(rows * cols);
-    for i in 0..rows * cols {
-      d.push(default);
-    }
+    let d = vec![default; rows * cols];
     Matrix::<T> {
       rows: rows,
       cols: cols,
@@ -247,7 +244,7 @@ pub fn from_elems<T: Num + Clone + Copy>(rows: usize, cols: usize, elems: &[T]) 
   let mut m = Matrix::<T> {
     rows: rows,
     cols: cols,
-    data: Vec::new()
+    data: Vec::with_capacity(rows * cols)
   };
   m.data.extend_from_slice(elems);
   m
