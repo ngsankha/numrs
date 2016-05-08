@@ -16,7 +16,7 @@ fn test_basic_matrix() {
 
 #[test]
 fn test_identity_matrix() {
-  let m = matrix::identity(5);
+  let m = matrix::identity::<f64>(5);
   for i in 0..5 {
     for j in 0..5 {
       if i == j {
