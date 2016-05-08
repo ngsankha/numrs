@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["from_elems","Creates a `Matrix` with dimensions `rows x cols` from the elements of the slice `elems`."],["identity","Creates an identity matrix of dimension `n x n`."]],"struct":[["Matrix","2D Matrix"]]});

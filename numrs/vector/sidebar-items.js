@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["from_elems",""]],"struct":[["Vector","1D Vector"]]});

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Matrix` struct in crate `numrs`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Matrix">
+
+    <title>numrs::matrix::Matrix - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='../index.html'>numrs</a>::<wbr><a href='index.html'>matrix</a></p><script>window.sidebarCurrent = {name: 'Matrix', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>numrs</a>::<wbr><a href='index.html'>matrix</a>::<wbr><a class='struct' href=''>Matrix</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-26' class='srclink' href='../../src/numrs/src/matrix.rs.html#30-34' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Matrix&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; {
+    // some fields omitted
+}</pre><div class='docblock'><p>2D Matrix</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='method.num_rows' class='method'><code>fn <a href='#method.num_rows' class='fnname'>num_rows</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<div class='docblock'><p>Returns the number of rows in the matrix.</p>
+</div><h4 id='method.num_cols' class='method'><code>fn <a href='#method.num_cols' class='fnname'>num_cols</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a></code></h4>
+<div class='docblock'><p>Returns the number of columns in the matrix.</p>
+</div><h4 id='method.get' class='method'><code>fn <a href='#method.get' class='fnname'>get</a>(&amp;self, i: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, j: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; T</code></h4>
+<div class='docblock'><p>Returns the element at <code>i</code>th row and <code>j</code>th column of the matrix.
+The row, column indexing is 0-based.</p>
+</div><h4 id='method.set' class='method'><code>fn <a href='#method.set' class='fnname'>set</a>(&amp;mut self, i: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, j: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, num: T)</code></h4>
+<div class='docblock'><p>Sets the element at <code>i</code>th row and <code>j</code>th column of the matrix as <code>num</code>.
+The row, column indexing is 0-based.</p>
+</div><h4 id='method.new' class='method'><code>fn <a href='#method.new' class='fnname'>new</a>(rows: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, cols: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, default: T) -&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+<div class='docblock'><p>Creates a new <code>Matrix</code> with dimensions as <code>rows x cols</code> with all values
+instantiated to <code>default</code>.</p>
+</div><h4 id='method.reshape' class='method'><code>fn <a href='#method.reshape' class='fnname'>reshape</a>(&amp;mut self, newrows: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>, newcols: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>)</code></h4>
+<div class='docblock'><p>Resizes the dimensions of the matrix with the new dimensions as
+<code>newrows x newcols</code>.</p>
+</div><h4 id='method.get_vec' class='method'><code>fn <a href='#method.get_vec' class='fnname'>get_vec</a>(&amp;self) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;T&gt;</code></h4>
+<div class='docblock'><p>Returns the matrix as a cloned vector in row major order.</p>
+</div><h4 id='method.transpose' class='method'><code>fn <a href='#method.transpose' class='fnname'>transpose</a>(&amp;mut self)</code></h4>
+<div class='docblock'><p>Transposes the matrix.</p>
+</div><h4 id='method.trace' class='method'><code>fn <a href='#method.trace' class='fnname'>trace</a>(&amp;self) -&gt; T</code></h4>
+<div class='docblock'><p>Trace of the matrix.</p>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Index.html' title='core::ops::Index'>Index</a>&lt;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>&gt; for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='associatedtype.Output' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Index.html#associatedtype.Output' class='type'>Output</a> = <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>[</a>T<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a></code></h4>
+<h4 id='method.index' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Index.html#tymethod.index' class='fnname'>index</a>&lt;'a&gt;(&amp;'a self, index: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.usize.html'>usize</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>&amp;'a [</a>T<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.slice.html'>]</a></code></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='method.clone' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+<h4 id='method.clone_from' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;<a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;)</code></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Add.html' title='core::ops::Add'>Add</a>&lt;<a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;&gt; for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='associatedtype.Output-1' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Add.html#associatedtype.Output' class='type'>Output</a> = <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+<h4 id='method.add' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Add.html#tymethod.add' class='fnname'>add</a>(self, rhs: <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;) -&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Sub.html' title='core::ops::Sub'>Sub</a>&lt;<a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;&gt; for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='associatedtype.Output-2' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Sub.html#associatedtype.Output' class='type'>Output</a> = <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+<h4 id='method.sub' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Sub.html#tymethod.sub' class='fnname'>sub</a>(self, rhs: <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;) -&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Mul.html' title='core::ops::Mul'>Mul</a>&lt;<a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;&gt; for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='associatedtype.Output-3' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Mul.html#associatedtype.Output' class='type'>Output</a> = <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+<h4 id='method.mul' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Mul.html#tymethod.mul' class='fnname'>mul</a>(self, rhs: <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;) -&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a> + <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Neg.html' title='core::ops::Neg'>Neg</a>&lt;Output=T&gt;&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Neg.html' title='core::ops::Neg'>Neg</a> for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='associatedtype.Output-4' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Neg.html#associatedtype.Output' class='type'>Output</a> = <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+<h4 id='method.neg' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Neg.html#tymethod.neg' class='fnname'>neg</a>(self) -&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Mul.html' title='core::ops::Mul'>Mul</a>&lt;T&gt; for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='associatedtype.Output-5' class='type'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Mul.html#associatedtype.Output' class='type'>Output</a> = <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+<h4 id='method.mul-1' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/trait.Mul.html#tymethod.mul' class='fnname'>mul</a>(self, rhs: T) -&gt; <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'><h4 id='method.eq' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, other: &amp;<a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></h4>
+<h4 id='method.ne' class='method'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, other: &amp;Rhs) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code><span class="since">1.0.0</span></h4>
+</div><h3 class='impl'><code>impl&lt;T: <a class='trait' href='../../numrs/common/trait.Number.html' title='numrs::common::Number'>Number</a>&gt; <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.Eq.html' title='core::cmp::Eq'>Eq</a> for <a class='struct' href='../../numrs/matrix/struct.Matrix.html' title='numrs::matrix::Matrix'>Matrix</a>&lt;T&gt;</code></h3><div class='impl-items'></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "numrs";
+        window.playgroundUrl = "";
+    </script>
+    <script src="../../jquery.js"></script>
+    <script src="../../main.js"></script>
+    
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>

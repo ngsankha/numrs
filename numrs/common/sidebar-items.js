@@ -1,0 +1,1 @@
+initSidebarItems({"trait":[["Number","A generic number trait for primitive integers and floating point numbers"]]});
