@@ -1,6 +1,6 @@
 [package]
 name = "numrs"
-version = "0.1.0"
+version = "0.2.0"
 authors = [ "Sankha Narayan Guria <sankha93@gmail.com>" ]
 license = "MIT"
 description = "A numerical computations library for Rust"
@@ -17,4 +17,4 @@ test = true
 doc = true
 
 [dependencies]
-num = "*"
+num = "0.1.32"
