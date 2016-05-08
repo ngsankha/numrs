@@ -21,27 +21,27 @@
 /// res = m2.clone() * 5.0; // scalar product of a matrix
 /// ```
 
-extern crate num;
-
-use self::num::traits::Num;
+pub use common::Number;
+use vector;
+use vector::{Vector};
 use std::ops::{Index, Add, Sub, Mul, Neg};
 
-pub struct Matrix<T: Num + Clone + Copy> {
+pub struct Matrix<T: Number> {
   rows: usize,
   cols: usize,
-  data: Vec<T>
+  data: Vector<T>
 }
 
-impl<T: Num + Clone + Copy> Index<usize> for Matrix<T> {
+impl<T: Number> Index<usize> for Matrix<T> {
   type Output = [T];
 
   #[inline]
   fn index<'a>(&'a self, index: usize) -> &'a [T] {
-    &self.data[self.rows * index..self.rows * index + self.cols]
+    &self.data.data[self.rows * index..self.rows * index + self.cols]
   }
 }
 
-impl<T: Num + Clone + Copy> Clone for Matrix<T> {
+impl<T: Number> Clone for Matrix<T> {
   fn clone(&self) -> Matrix<T> {
     Matrix::<T> {
       rows: self.num_rows(),
@@ -57,39 +57,39 @@ impl<T: Num + Clone + Copy> Clone for Matrix<T> {
   }
 }
 
-impl<T: Num + Clone + Copy> Add<Matrix<T>> for Matrix<T> {
+impl<T: Number> Add<Matrix<T>> for Matrix<T> {
   type Output = Matrix<T>;
 
   fn add(self, rhs: Matrix<T>) -> Matrix<T> {
     if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
-      let mut new_mat = Matrix::<T>::new(self.num_rows(), self.num_cols(), T::zero());
-      for i in 0..self.data.len() {
-        new_mat.data[i] = self.data[i] + rhs.data[i];
+      Matrix::<T> {
+        rows: self.num_rows(),
+        cols: self.num_cols(),
+        data: self.data + rhs.data
       }
-      new_mat
     } else {
       panic!("Matrices are not conformable for addition.");
     }
   }
 }
 
-impl<T: Num + Clone + Copy> Sub<Matrix<T>> for Matrix<T> {
+impl<T: Number> Sub<Matrix<T>> for Matrix<T> {
   type Output = Matrix<T>;
 
   fn sub(self, rhs: Matrix<T>) -> Matrix<T> {
     if self.num_rows() == rhs.num_rows() && self.num_cols() == rhs.num_cols() {
-      let mut new_mat = Matrix::<T>::new(self.num_rows(), self.num_cols(), T::zero());
-      for i in 0..self.data.len() {
-        new_mat.data[i] = self.data[i] - rhs.data[i];
+      Matrix::<T> {
+        rows: self.num_rows(),
+        cols: self.num_cols(),
+        data: self.data - rhs.data
       }
-      new_mat
     } else {
       panic!("Matrices are not conformable for subtraction.");
     }
   }
 }
 
-impl<T: Num + Clone + Copy> Mul<Matrix<T>> for Matrix<T> {
+impl<T: Number> Mul<Matrix<T>> for Matrix<T> {
   type Output = Matrix<T>;
 
   fn mul(self, rhs: Matrix<T>) -> Matrix<T> {
@@ -111,47 +111,42 @@ impl<T: Num + Clone + Copy> Mul<Matrix<T>> for Matrix<T> {
   }
 }
 
-impl<T: Num + Clone + Copy + Neg<Output = T>> Neg for Matrix<T> {
+impl<T: Number + Neg<Output = T>> Neg for Matrix<T> {
   type Output = Matrix<T>;
 
   fn neg(self) -> Matrix<T> {
-    let mut m = self.clone();
-    for i in 0..self.data.len() {
-      m.data[i] = -self.data[i];
+    Matrix::<T> {
+      rows: self.num_rows(),
+      cols: self.num_cols(),
+      data: -self.data
     }
-    m
   }
 }
 
-impl<T: Num + Clone + Copy> Mul<T> for Matrix<T> {
+impl<T: Number> Mul<T> for Matrix<T> {
   type Output = Matrix<T>;
 
   fn mul(self, rhs: T) -> Matrix<T> {
-    let mut m = self.clone();
-    for i in 0..self.data.len() {
-      m.data[i] = rhs * self.data[i];
+    Matrix::<T> {
+      rows: self.num_rows(),
+      cols: self.num_cols(),
+      data: self.data * rhs
     }
-    m
   }
 }
 
-impl<T: Num + Clone + Copy> PartialEq for Matrix<T> {
+impl<T: Number> PartialEq for Matrix<T> {
   fn eq(&self, other: &Matrix<T>) -> bool {
     if self.num_rows() != other.num_rows() || self.num_cols() != other.num_cols() {
       return false;
     }
-    for i in 0..self.data.len() {
-      if self.data[i] != other.data[i] {
-        return false;
-      }
-    }
-    true
+    self.data == other.data
   }
 }
 
-impl<T: Num + Clone + Copy> Eq for Matrix<T> {}
+impl<T: Number> Eq for Matrix<T> {}
 
-impl<T: Num + Clone + Copy> Matrix<T> {
+impl<T: Number> Matrix<T> {
   /// Returns the number of rows in the matrix.
   #[inline]
   pub fn num_rows(&self) -> usize{
@@ -190,11 +185,10 @@ impl<T: Num + Clone + Copy> Matrix<T> {
   /// Creates a new `Matrix` with dimensions as `rows x cols` with all values
   /// instantiated to `default`.
   pub fn new(rows: usize, cols: usize, default: T) -> Matrix<T> {
-    let d = vec![default; rows * cols];
     Matrix::<T> {
       rows: rows,
       cols: cols,
-      data: d
+      data: Vector::new(rows * cols, default)
     }
   }
 
@@ -211,7 +205,7 @@ impl<T: Num + Clone + Copy> Matrix<T> {
 
   /// Returns the matrix as a cloned vector in row major order.
   pub fn get_vec(&self) -> Vec<T> {
-    self.data.clone()
+    self.data.data.clone()
   }
 
   /// Transposes the matrix.
@@ -240,18 +234,16 @@ impl<T: Num + Clone + Copy> Matrix<T> {
 
 /// Creates a `Matrix` with dimensions `rows x cols` from the elements of the
 /// slice `elems`.
-pub fn from_elems<T: Num + Clone + Copy>(rows: usize, cols: usize, elems: &[T]) -> Matrix<T> {
-  let mut m = Matrix::<T> {
+pub fn from_elems<T: Number>(rows: usize, cols: usize, elems: &[T]) -> Matrix<T> {
+  Matrix::<T> {
     rows: rows,
     cols: cols,
-    data: Vec::with_capacity(rows * cols)
-  };
-  m.data.extend_from_slice(elems);
-  m
+    data: vector::from_elems(elems)
+  }
 }
 
 /// Creates an identity matrix of dimension `n x n`.
-pub fn identity<T: Num + Clone + Copy>(n: usize) -> Matrix<T> {
+pub fn identity<T: Number>(n: usize) -> Matrix<T> {
   let mut m = Matrix::<T>::new(n, n, T::zero());
   for i in 0..n {
     m.set(i, i, T::one());
