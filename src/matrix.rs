@@ -1,25 +1,25 @@
-/// A 2D Matrix type
-///
-/// The Matrix type supports simple arithmetic operations from the start and
-/// provides convenient methods for accessing the elements of the matrix.
-///
-/// # Examples
-/// ```
-/// use numrs::matrix;
-/// use numrs::matrix::Matrix;
-///
-/// // Create a new 2x2 matrix with all values 0.0
-/// let m1 = Matrix::new(2, 2, 0.0);
-///
-/// // Creates a 2x2 matrix from the below elements in row major order
-/// let elems = [1.0, 2.0, 3.0, 4.0];
-/// let m2 = matrix::from_elems(2, 2, &elems);
-///
-/// let mut res = m1.clone() + m2.clone(); // add two matrices
-/// res = m1.clone() - m2.clone(); // subtract 2 matrices
-/// res = m1.clone() * m2.clone(); // matrix product of 2 matrices
-/// res = m2.clone() * 5.0; // scalar product of a matrix
-/// ```
+//! A 2D Matrix type
+//!
+//! The Matrix type supports simple arithmetic operations from the start and
+//! provides convenient methods for accessing the elements of the matrix.
+//!
+//! # Examples
+//! ```
+//! use numrs::matrix;
+//! use numrs::matrix::Matrix;
+//!
+//! // Create a new 2x2 matrix with all values 0.0
+//! let m1 = Matrix::new(2, 2, 0.0);
+//!
+//! // Creates a 2x2 matrix from the below elements in row major order
+//! let elems = [1.0, 2.0, 3.0, 4.0];
+//! let m2 = matrix::from_elems(2, 2, &elems);
+//!
+//! let mut res = m1.clone() + m2.clone(); // add two matrices
+//! res = m1.clone() - m2.clone(); // subtract 2 matrices
+//! res = m1.clone() * m2.clone(); // matrix product of 2 matrices
+//! res = m2.clone() * 5.0; // scalar product of a matrix
+//! ```
 
 use std::ops::{Index, Add, Sub, Mul, Neg};
 use common::Number;
