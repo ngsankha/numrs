@@ -1,4 +1,4 @@
-/// A 2D Matrix type composed of `f64` elements.
+/// A 2D Matrix type
 ///
 /// The Matrix type supports simple arithmetic operations from the start and
 /// provides convenient methods for accessing the elements of the matrix.
@@ -11,7 +11,7 @@
 /// // Create a new 2x2 matrix with all values 0.0
 /// let m1 = Matrix::new(2, 2, 0.0);
 ///
-/// // Creates a 2x2 matrix from the above vector in row major order
+/// // Creates a 2x2 matrix from the below elements in row major order
 /// let elems = [1.0, 2.0, 3.0, 4.0];
 /// let m2 = matrix::from_elems(2, 2, &elems);
 ///
@@ -21,11 +21,12 @@
 /// res = m2.clone() * 5.0; // scalar product of a matrix
 /// ```
 
-pub use common::Number;
+use std::ops::{Index, Add, Sub, Mul, Neg};
+use common::Number;
 use vector;
 use vector::{Vector};
-use std::ops::{Index, Add, Sub, Mul, Neg};
 
+/// 2D Matrix
 pub struct Matrix<T: Number> {
   rows: usize,
   cols: usize,

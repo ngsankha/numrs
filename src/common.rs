@@ -2,6 +2,7 @@ extern crate num;
 
 use self::num::traits::Num;
 
+/// A generic number trait for primitive integers and floating point numbers
 pub trait Number: Num + Clone + Copy {}
 
 impl Number for f64 {}

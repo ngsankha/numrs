@@ -1,6 +1,30 @@
-use std::ops::{Index, IndexMut, Add, Sub, Mul, Neg};
-pub use common::Number;
+/// A 1D Vector type
+///
+/// The Vector type supports simple arithmetic operations from the start and
+/// provides convenient methods for accessing the elements of the vector.
+///
+/// # Examples
+/// ```
+/// use numrs::vector;
+/// use numrs::vector::Vector;
+///
+/// // Create a new vector with all values 0.0
+/// let v1 = Vector::new(4, 0.0);
+///
+/// // Creates a vector from the below elements
+/// let elems = [1.0, 2.0, 3.0, 4.0];
+/// let v2 = vector::from_elems(&elems);
+///
+/// let mut res = v1.clone() + v2.clone(); // add two vectors
+/// res = v1.clone() - v2.clone(); // subtract 2 vector
+/// res = v1.clone() * v2.clone(); // matrix product of 2 vector
+/// res = v2.clone() * 5.0; // multiply a vector with a constant
+/// ```
 
+use std::ops::{Index, IndexMut, Add, Sub, Mul, Neg};
+use common::Number;
+
+/// 1D Vector
 pub struct Vector<T: Number> {
   pub data: Vec<T>
 }
